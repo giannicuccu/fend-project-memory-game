@@ -13,24 +13,28 @@
 const startingTime = performance.now();
 // performance monitoring
 
- //debugger
+//debugger
 
-const deck = document.getElementsByClassName('deck');
+const deck = document.getElementsByClassName('deck')[0];
 const cards = shuffle([...document.querySelectorAll('.card')]);
 const docFrag = document.createDocumentFragment();
+let openCards = [];
+let guessedCards = 0;
+let movesCounter = 0;
 
-for (el of cards){
+for (el of cards) {
     el.className = 'card';
     docFrag.appendChild(el);
 }
 
-deck[0].innerHTML = '';
-deck[0].appendChild(docFrag);
+deck.innerHTML = '';
+deck.appendChild(docFrag);
 
 
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
-    var currentIndex = array.length, temporaryValue, randomIndex;
+    var currentIndex = array.length,
+        temporaryValue, randomIndex;
 
     while (currentIndex !== 0) {
         randomIndex = Math.floor(Math.random() * currentIndex);
@@ -45,17 +49,97 @@ function shuffle(array) {
 
 
 /*
- * set up the event listener for a card. If a card is clicked:
- *  - display the card's symbol (put this functionality in another function that you call from this one)
- *  - add the card to a *list* of "open" cards (put this functionality in another function that you call from this one)
- *  - if the list already has another card, check to see if the two cards match
- *    + if the cards do match, lock the cards in the open position (put this functionality in another function that you call from this one)
- *    + if the cards do not match, remove the cards from the list and hide the card's symbol (put this functionality in another function that you call from this one)
- *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
- *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
- */
+* set up the event listener for a card. If a card is clicked:
+*  - display the card's symbol (put this functionality in another function that you call from this one)
+*  - add the card to a *list* of "open" cards (put this functionality in another function that you call from this one)
+*  - if the list already has another card, check to see if the two cards match
+*    + if the cards do match, lock the cards in the open position (put this functionality in another function that you call from this one)
+*    + if the cards do not match, remove the cards from the list and hide the card's symbol (put this functionality in another function that you call from this one)
+*    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
+*    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
+*/
 
 
+
+const displaySymbol = function (evt) {
+    console.log(evt);
+    let cardSymbol = '';
+    if (evt.target.nodeName === 'LI' && evt.target.className === 'card') {
+        evt.target.classList.add('open', 'show');        
+        cardSymbol = evt.target.firstElementChild.className;
+        addToOpenCards(cardSymbol);
+    } else if (evt.target.parentNode.nodeName === 'LI'&& evt.target.parentNode.className === 'card') {
+        evt.target.parentNode.classList.add('open', 'show');
+        cardSymbol = evt.target.className;
+        addToOpenCards(cardSymbol);
+        }
+    
+}
+
+const addToOpenCards = function (cardSymbol) {
+    if (openCards.length === 0) {
+        openCards.push(cardSymbol);
+    } else if (openCards.length === 1) {
+        openCards.push(cardSymbol);
+        if (openCards[0] === openCards[1]) {
+            lockCards();
+            incrementCounter();
+            checkForComplete();
+        } else {
+            window.setTimeout(() => {
+                flipCards();
+            }, 1000);
+
+            incrementCounter();
+        }
+
+    }
+
+}
+
+const lockCards = function (cardSymbol) {
+    let cards = document.querySelectorAll('.card.open.show');
+    for (card of cards) {
+        card.className = 'card';
+        card.classList.add('match')
+    }
+    guessedCards += 1;
+    openCards = [];
+    
+}
+
+const flipCards = function (cardSymbol) {
+    let cards = document.querySelectorAll('.card.open.show');
+    for (card of cards) {
+        card.className = 'card';
+    }
+    openCards = [];
+    
+}
+
+
+const incrementCounter = function () {
+    movesCounter += 1;
+    counter = document.getElementsByClassName('moves')[0];
+    counter.innerHTML = movesCounter;
+}
+
+const checkForComplete = function () {
+    guessedCards === 8 ? 
+        console.log('COMPLETED') : 
+            console.log('NOT COMPLETED')
+}
+
+
+const reloadGame = function(){
+    docFrag.innerHTML = '';
+    cards = shuffle([...document.querySelectorAll('.card')]);
+    guessedCards = 0;
+    movesCounter = 0;
+    openCards = [];
+}
+
+deck.addEventListener('click', displaySymbol);
 
 
 // performance monitoring
