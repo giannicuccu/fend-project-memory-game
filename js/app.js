@@ -16,8 +16,10 @@ const startingTime = performance.now();
 //debugger
 
 const deck = document.getElementsByClassName('deck')[0];
-const cards = shuffle([...document.querySelectorAll('.card')]);
-const docFrag = document.createDocumentFragment();
+let resetBtn = document.getElementsByClassName('restart')[0];
+let cards = shuffle([...document.querySelectorAll('.card')]);
+let counter =  document.getElementsByClassName('moves')[0];
+let docFrag = document.createDocumentFragment();
 let openCards = [];
 let guessedCards = 0;
 let movesCounter = 0;
@@ -27,13 +29,19 @@ for (el of cards) {
     docFrag.appendChild(el);
 }
 
+counter.innerHTML='0';
 deck.innerHTML = '';
 deck.appendChild(docFrag);
+//console.log(docFrag)
+
+
+
+
 
 
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
-    var currentIndex = array.length,
+    let currentIndex = array.length,
         temporaryValue, randomIndex;
 
     while (currentIndex !== 0) {
@@ -62,13 +70,13 @@ function shuffle(array) {
 
 
 const displaySymbol = function (evt) {
-    console.log(evt);
+    
     let cardSymbol = '';
-    if (evt.target.nodeName === 'LI' && evt.target.className === 'card') {
+    if (evt.target.nodeName === 'LI' && evt.target.className === 'card' &&  openCards.length<=1) {
         evt.target.classList.add('open', 'show');        
         cardSymbol = evt.target.firstElementChild.className;
         addToOpenCards(cardSymbol);
-    } else if (evt.target.parentNode.nodeName === 'LI'&& evt.target.parentNode.className === 'card') {
+    } else if (evt.target.parentNode.nodeName === 'LI'&& evt.target.parentNode.className === 'card' && openCards.length<=1) {
         evt.target.parentNode.classList.add('open', 'show');
         cardSymbol = evt.target.className;
         addToOpenCards(cardSymbol);
@@ -88,7 +96,7 @@ const addToOpenCards = function (cardSymbol) {
         } else {
             window.setTimeout(() => {
                 flipCards();
-            }, 1000);
+            }, 800);
 
             incrementCounter();
         }
@@ -120,7 +128,6 @@ const flipCards = function (cardSymbol) {
 
 const incrementCounter = function () {
     movesCounter += 1;
-    counter = document.getElementsByClassName('moves')[0];
     counter.innerHTML = movesCounter;
 }
 
@@ -131,16 +138,20 @@ const checkForComplete = function () {
 }
 
 
-const reloadGame = function(){
-    docFrag.innerHTML = '';
-    cards = shuffle([...document.querySelectorAll('.card')]);
-    guessedCards = 0;
-    movesCounter = 0;
+const resetGame = function(){   
     openCards = [];
+    counter.innerHTML='0';
+    deck.innerHTML = '';
+    cards = shuffle(cards);
+    for (el of cards) {
+        el.className = 'card';
+        docFrag.appendChild(el);
+    }
+    deck.appendChild(docFrag);
 }
 
 deck.addEventListener('click', displaySymbol);
-
+resetBtn.addEventListener('click', resetGame);
 
 // performance monitoring
 const endingTime = performance.now();
