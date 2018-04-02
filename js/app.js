@@ -140,6 +140,7 @@ const checkForComplete = function () {
 
 const resetGame = function(){   
     openCards = [];
+    movesCounter = 0;
     counter.innerHTML='0';
     deck.innerHTML = '';
     cards = shuffle(cards);
