@@ -49,13 +49,15 @@ h1 {
     justify-content: space-between;
     align-items: center;
     margin: 0 0 3em;
+   
+              
 }
 
 .deck .card {
     height: 125px;
     width: 125px;
     background: #2e3d49;
-    font-size: 0;
+    font-size: 0;    
     color: #ffffff;
     border-radius: 8px;
     cursor: pointer;
@@ -63,6 +65,12 @@ h1 {
     justify-content: center;
     align-items: center;
     box-shadow: 5px 2px 20px 0 rgba(46, 61, 73, 0.5);
+    transition: transform 0.4s ease-out;
+    transform: rotateY(-180deg);
+    position: relative;
+    
+    
+    
 }
 
 .deck .card.open {
@@ -72,14 +80,32 @@ h1 {
 }
 
 .deck .card.show {
+    transform: rotateY(0);
     font-size: 33px;
 }
 
 .deck .card.match {
+    transform: rotateY(0);
     cursor: default;
     background: #02ccba;
     font-size: 33px;
 }
+
+
+.deck .card  i.fa{
+    transition: transform 0.4s ease-out;
+    backface-visibility: hidden;   
+    transform: rotateY(-180deg);
+}
+
+.deck .card.show  i.fa{    
+    transform: rotateY(0);    
+} 
+.deck .card.match  i.fa{    
+    transform: rotateY(0);    
+} 
+
+
 
 /*
  * Styles for the Score Panel
