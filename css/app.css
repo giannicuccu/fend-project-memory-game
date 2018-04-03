@@ -125,6 +125,7 @@ check for edge rotation bug with icon
     color: floralwhite;
     font-weight: 600;
     margin: 0 auto;
+    text-align: center;
     animation-name: showRecap;
 	animation-duration: 0.35s;	
 	animation-iteration-count: 1;
@@ -134,21 +135,21 @@ check for edge rotation bug with icon
 
 
 @keyframes rotateCard {
-	0%   { transform: scale(1); background-color: greenyellow; /*rotate(90deg);*/    }
-	33%  { transform: scale(1.15)/*rotate(180deg);*/ }	
-	66%  { transform: scale(0.85)/*rotate(270deg);*/ }
-	100% { transform: scale(1);/*rotate(360deg);*/  background-color: #02ccba; }
+	0%   { transform: scale(1); background-color: #adff2f;}
+	33%  { transform: scale(1.15); }	
+	66%  { transform: scale(0.85); }
+	100% { transform: scale(1); background-color: #02ccba; }
 }
 
 @keyframes shakeCard {
-	0%   { transform: rotate(10deg); background:#ac2029  }
+	0%   { transform: rotate(10deg); background-color:#ac2029  }
 	33%  { transform: rotate(-10deg); }	
 	66%  { transform: rotate(10deg); }
-	100% { transform: rotate(0); background:#ac2029}
+	100% { transform: rotate(0); background-color:#ac2029}
 }
 
 @keyframes showRecap {
-	0%   { transform: scale(0);}
+	0%   { transform: scale(0); }
 	33%  { transform: scale(1.15); }	
 	66%  { transform: scale(0.85); }
 	100% { transform: scale(1); }

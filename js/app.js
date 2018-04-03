@@ -165,7 +165,7 @@ const showResume = function(){
     //openCards = [];
     //movesCounter = 0;
     //counter.innerHTML='0';
-    deck.innerHTML = '<h1 class="finaltitle">GAME COMPLETE</h1>';
+    deck.innerHTML = '<h1 class="finaltitle"><i class="fa fa-check"></i><br>GAME COMPLETE</h1>';
     // cards = shuffle(cards);
     // for (el of cards) {
     //     el.className = 'card';
