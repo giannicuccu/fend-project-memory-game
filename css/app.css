@@ -137,22 +137,40 @@ check for edge rotation bug with icon
     align-items: center;
     margin: 0 0 3em;
     animation-name: showRecap;
-	animation-duration: 0.35s;	
+	animation-duration: 0.8s;	
 	animation-iteration-count: 1;
-    animation-timing-function: linear;
+    animation-timing-function: ease-in-out;
     position: absolute;
 	
 }
 
  .finaltitle{
     font-size: 48px;
-    color:green;
+    color:#3c8853;
     font-weight: 600;
     text-align: center;
     margin-bottom: 15px;
-    margin-top: -90px;
-    
-	
+    margin-top: -90px;	
+}
+
+.finaltitle i{
+    font-size: 64px;
+   	
+}
+
+#finalreload{
+    background: #3c8853;
+    color: #fff;
+    cursor: pointer;
+    border: none;
+    outline: none;
+    border-radius: 4px;
+    padding: 10px 20px;
+    font-size: 28px;
+}
+
+#finalreload:hover {
+   background: #2c9f2c;
 }
 
 

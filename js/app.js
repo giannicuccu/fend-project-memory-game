@@ -23,7 +23,7 @@ let docFrag = document.createDocumentFragment();
 let openCards = [];
 let guessedCards = 0;
 let movesCounter = 0;
-let gameCompletedEvt = new Event('gameCompleted');
+let gameCompletedEvt = new CustomEvent('gameCompleted');
 
 for (el of cards) {
     el.className = 'card';
@@ -150,6 +150,7 @@ const checkForComplete = function () {
 
 const resetGame = function(){   
     openCards = [];
+    guessedCards = 0;
     movesCounter = 0;
     counter.innerHTML='0';
     deck.innerHTML = '';
@@ -159,18 +160,26 @@ const resetGame = function(){
         docFrag.appendChild(el);
     }
     deck.appendChild(docFrag);
+    //deck.addEventListener('gameCompleted', showResume);
 }
 
 const showResume = function(){ 
     
     docFrag.innerHTML = `
     <section class="finalscreen">    
-    <h1 class="finaltitle"><i class="fa fa-check"></i><br>GAME COMPLETE</h1>
-    <p>You win in ${movesCounter} moves !!!</p>
-    <button><i class="fa fa-repeat"></i> TRY AGAIN</button>
+    <h1 class="finaltitle"><i class="fa fa-check"></i><br>GAME COMPLETED</h1>
+    <p class="finalmessage">You win in ${movesCounter} moves !!!</p>
+    <button id="finalreload"><i class="fa fa-repeat"></i> PLAY AGAIN</button>
     </section>
     `;
+
     deck.insertAdjacentHTML('afterend', docFrag.innerHTML);
+    reloadBtn = document.getElementById('finalreload');
+    reloadBtn.addEventListener('click', function reloadFnc(){
+        console.log("RELOAD GAME");
+        reloadBtn.parentNode.remove();
+        resetGame();
+    })
 }
 
 
@@ -178,6 +187,8 @@ const showResume = function(){
 deck.addEventListener('click', displaySymbol);
 deck.addEventListener('gameCompleted', showResume);
 resetBtn.addEventListener('click', resetGame);
+
+
 
 
 
