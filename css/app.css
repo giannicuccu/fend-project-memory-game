@@ -49,13 +49,15 @@ h1 {
     justify-content: space-between;
     align-items: center;
     margin: 0 0 3em;
+   
+              
 }
 
 .deck .card {
     height: 125px;
     width: 125px;
     background: #2e3d49;
-    font-size: 0;
+    font-size: 33px;    
     color: #ffffff;
     border-radius: 8px;
     cursor: pointer;
@@ -63,6 +65,12 @@ h1 {
     justify-content: center;
     align-items: center;
     box-shadow: 5px 2px 20px 0 rgba(46, 61, 73, 0.5);
+    transition: transform 0.4s ease-out;
+    transform: rotateY(-180deg);
+    position: relative;
+    
+    
+    
 }
 
 .deck .card.open {
@@ -72,13 +80,78 @@ h1 {
 }
 
 .deck .card.show {
+    transform: rotateY(0);
     font-size: 33px;
 }
 
+.deck .card.show.open.shake {
+    animation-name: shakeCard;
+	animation-duration: 0.35s;	
+	animation-iteration-count: 1;
+	animation-timing-function: linear;
+}
+
 .deck .card.match {
+    transform: rotateY(0);
+    transform-origin: center;
     cursor: default;
     background: #02ccba;
     font-size: 33px;
+    animation-name: rotateCard;
+	animation-duration: 0.35s;	
+	animation-iteration-count: 1;
+	animation-timing-function: linear;
+}
+
+/* TODO 
+check for edge rotation bug with icon
+ */
+
+.deck .card  i.fa{
+    transition: transform 0.4s ease-out;
+    backface-visibility: hidden;   
+    transform: rotateY(-180deg);
+}
+
+.deck .card.show  i.fa{    
+    transform: rotateY(0);    
+} 
+.deck .card.match  i.fa{    
+    transform: rotateY(0);    
+} 
+
+.deck .finaltitle{
+    font-size: 48px;
+    color: floralwhite;
+    font-weight: 600;
+    margin: 0 auto;
+    animation-name: showRecap;
+	animation-duration: 0.35s;	
+	animation-iteration-count: 1;
+	animation-timing-function: linear;
+	
+}
+
+
+@keyframes rotateCard {
+	0%   { transform: scale(1); background-color: greenyellow; /*rotate(90deg);*/    }
+	33%  { transform: scale(1.15)/*rotate(180deg);*/ }	
+	66%  { transform: scale(0.85)/*rotate(270deg);*/ }
+	100% { transform: scale(1);/*rotate(360deg);*/  background-color: #02ccba; }
+}
+
+@keyframes shakeCard {
+	0%   { transform: rotate(10deg); background:#ac2029  }
+	33%  { transform: rotate(-10deg); }	
+	66%  { transform: rotate(10deg); }
+	100% { transform: rotate(0); background:#ac2029}
+}
+
+@keyframes showRecap {
+	0%   { transform: scale(0);}
+	33%  { transform: scale(1.15); }	
+	66%  { transform: scale(0.85); }
+	100% { transform: scale(1); }
 }
 
 /*
