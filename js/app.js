@@ -162,16 +162,15 @@ const resetGame = function(){
 }
 
 const showResume = function(){ 
-    //openCards = [];
-    //movesCounter = 0;
-    //counter.innerHTML='0';
-    deck.innerHTML = '<h1 class="finaltitle"><i class="fa fa-check"></i><br>GAME COMPLETE</h1>';
-    // cards = shuffle(cards);
-    // for (el of cards) {
-    //     el.className = 'card';
-    //     docFrag.appendChild(el);
-    // }
-    // deck.appendChild(docFrag);
+    
+    docFrag.innerHTML = `
+    <section class="finalscreen">    
+    <h1 class="finaltitle"><i class="fa fa-check"></i><br>GAME COMPLETE</h1>
+    <p>You win in ${movesCounter} moves !!!</p>
+    <button><i class="fa fa-repeat"></i> TRY AGAIN</button>
+    </section>
+    `;
+    deck.insertAdjacentHTML('afterend', docFrag.innerHTML);
 }
 
 
@@ -179,8 +178,6 @@ const showResume = function(){
 deck.addEventListener('click', displaySymbol);
 deck.addEventListener('gameCompleted', showResume);
 resetBtn.addEventListener('click', resetGame);
-
-
 
 
 

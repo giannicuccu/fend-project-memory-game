@@ -33,6 +33,9 @@ h1 {
     font-weight: 300;
 }
 
+/*overlay fix*/
+header{margin-bottom: 25px;}
+
 /*
  * Styles for the deck of cards
  */
@@ -43,7 +46,7 @@ h1 {
     background: linear-gradient(160deg, #02ccba 0%, #aa7ecd 100%);
     padding: 32px;
     border-radius: 10px;
-    box-shadow: 12px 15px 20px 0 rgba(46, 61, 73, 0.5);
+    /* box-shadow: 12px 15px 20px 0 rgba(46, 61, 73, 0.5); */
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
@@ -120,16 +123,35 @@ check for edge rotation bug with icon
     transform: rotateY(0);    
 } 
 
-.deck .finaltitle{
-    font-size: 48px;
-    color: floralwhite;
-    font-weight: 600;
-    margin: 0 auto;
-    text-align: center;
+
+.finalscreen{
+    width: 660px;
+    height: 750px;
+    background: #fff;
+    padding: 32px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    margin: 0 0 3em;
     animation-name: showRecap;
 	animation-duration: 0.35s;	
 	animation-iteration-count: 1;
-	animation-timing-function: linear;
+    animation-timing-function: linear;
+    position: absolute;
+	
+}
+
+ .finaltitle{
+    font-size: 48px;
+    color:green;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 15px;
+    margin-top: -90px;
+    
 	
 }
 
