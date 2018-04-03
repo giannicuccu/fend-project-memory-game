@@ -23,6 +23,7 @@ let docFrag = document.createDocumentFragment();
 let openCards = [];
 let guessedCards = 0;
 let movesCounter = 0;
+let gameCompletedEvt = new Event('gameCompleted');
 
 for (el of cards) {
     el.className = 'card';
@@ -95,18 +96,17 @@ const addToOpenCards = function (cardSymbol) {
             checkForComplete();
         } else {
             shakeCards();
+            incrementCounter();
             window.setTimeout(() => {
                 flipCards();
             }, 1000);
-
-            incrementCounter();
         }
 
     }
 
 }
 
-const lockCards = function (cardSymbol) {
+const lockCards = function () {
     let cards = document.querySelectorAll('.card.open.show');
 
     for (card of cards) {
@@ -119,18 +119,19 @@ const lockCards = function (cardSymbol) {
     
 }
 
-const flipCards = function (cardSymbol) {
+const flipCards = function () {
     let cards = document.querySelectorAll('.card.open.show');
 
     for (card of cards) {
         card.className = 'card';
+        //card.classList.add('shake')
     }
     openCards = [];    
 }
 
-const shakeCards = function(cardSymbol){
+const shakeCards = function(){
     let cards = document.querySelectorAll('.card.open.show');    
-    
+
     for (card of cards) {
         card.classList.add('shake')
     }
@@ -143,9 +144,7 @@ const incrementCounter = function () {
 }
 
 const checkForComplete = function () {
-    guessedCards === 8 ? 
-        console.log('COMPLETED') : 
-            console.log('NOT COMPLETED')
+    guessedCards === 8 ? deck.dispatchEvent(gameCompletedEvt) : false;
 }
 
 
@@ -162,9 +161,23 @@ const resetGame = function(){
     deck.appendChild(docFrag);
 }
 
+const showResume = function(){ 
+    //openCards = [];
+    //movesCounter = 0;
+    //counter.innerHTML='0';
+    deck.innerHTML = '<h1 class="finaltitle">GAME COMPLETE</h1>';
+    // cards = shuffle(cards);
+    // for (el of cards) {
+    //     el.className = 'card';
+    //     docFrag.appendChild(el);
+    // }
+    // deck.appendChild(docFrag);
+}
+
 
 /*Add event listeners*/
 deck.addEventListener('click', displaySymbol);
+deck.addEventListener('gameCompleted', showResume);
 resetBtn.addEventListener('click', resetGame);
 
 
