@@ -69,9 +69,9 @@ function shuffle(array) {
 
 
 
-const displaySymbol = function (evt) {
-    
+const displaySymbol = function (evt) {    
     let cardSymbol = '';
+
     if (evt.target.nodeName === 'LI' && evt.target.className === 'card' &&  openCards.length<=1) {
         evt.target.classList.add('open', 'show');        
         cardSymbol = evt.target.firstElementChild.className;
@@ -94,9 +94,10 @@ const addToOpenCards = function (cardSymbol) {
             incrementCounter();
             checkForComplete();
         } else {
+            shakeCards();
             window.setTimeout(() => {
                 flipCards();
-            }, 800);
+            }, 1000);
 
             incrementCounter();
         }
@@ -107,22 +108,32 @@ const addToOpenCards = function (cardSymbol) {
 
 const lockCards = function (cardSymbol) {
     let cards = document.querySelectorAll('.card.open.show');
+
     for (card of cards) {
         card.className = 'card';
         card.classList.add('match')
     }
     guessedCards += 1;
     openCards = [];
+
     
 }
 
 const flipCards = function (cardSymbol) {
     let cards = document.querySelectorAll('.card.open.show');
+
     for (card of cards) {
         card.className = 'card';
     }
-    openCards = [];
+    openCards = [];    
+}
+
+const shakeCards = function(cardSymbol){
+    let cards = document.querySelectorAll('.card.open.show');    
     
+    for (card of cards) {
+        card.classList.add('shake')
+    }
 }
 
 
@@ -151,8 +162,14 @@ const resetGame = function(){
     deck.appendChild(docFrag);
 }
 
+
+/*Add event listeners*/
 deck.addEventListener('click', displaySymbol);
 resetBtn.addEventListener('click', resetGame);
+
+
+
+
 
 // performance monitoring
 const endingTime = performance.now();
