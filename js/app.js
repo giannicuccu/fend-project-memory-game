@@ -18,6 +18,7 @@ const startingTime = performance.now();
 
 const deck = document.getElementsByClassName('deck')[0];
 let resetBtn = document.getElementsByClassName('restart')[0];
+let ratingStars = document.querySelectorAll('.fa.fa-star');
 let cards = shuffle([...document.querySelectorAll('.card')]);
 let counter =  document.getElementsByClassName('moves')[0];
 let docFrag = document.createDocumentFragment();
@@ -31,7 +32,7 @@ for (el of cards) {
     docFrag.appendChild(el);
 }
 
-counter.innerHTML='0';
+counter.innerHTML = '0';
 deck.innerHTML = '';
 deck.appendChild(docFrag);
 
@@ -71,11 +72,11 @@ function shuffle(array) {
 const displaySymbol = function (evt) {    
     let cardSymbol = '';
 
-    if (evt.target.nodeName === 'LI' && evt.target.className === 'card' &&  openCards.length<=1) {
+    if (evt.target.nodeName === 'LI' && evt.target.className === 'card' &&  openCards.length <= 1) {
         evt.target.classList.add('open', 'show');        
         cardSymbol = evt.target.firstElementChild.className;
         addToOpenCards(cardSymbol);
-    } else if (evt.target.parentNode.nodeName === 'LI'&& evt.target.parentNode.className === 'card' && openCards.length<=1) {
+    } else if (evt.target.parentNode.nodeName === 'LI'&& evt.target.parentNode.className === 'card' && openCards.length <= 1) {
         evt.target.parentNode.classList.add('open', 'show');
         cardSymbol = evt.target.className;
         addToOpenCards(cardSymbol);
@@ -108,7 +109,7 @@ const lockCards = function () {
     let cards = document.querySelectorAll('.card.open.show');
     for (card of cards) {
         card.className = 'card';
-        card.classList.add('match')
+        card.classList.add('match');
     }
     guessedCards += 1;
     openCards = [];
@@ -136,6 +137,23 @@ const shakeCards = function(){
 const incrementCounter = function () {
     movesCounter += 1;
     counter.innerHTML = movesCounter;
+    updateRating(movesCounter);
+}
+
+
+const updateRating = function (mc) {
+    console.log(ratingStars);
+
+    if (mc === 0) {
+        for (star of ratingStars) {
+            star.className = 'fa fa-star';
+        }
+    } else if (mc === 12) {
+        ratingStars[2].className = 'fa fa-star-o';
+
+    } else if (mc === 18) {
+        ratingStars[1].className = 'fa fa-star-o';
+    }
 }
 
 
@@ -150,6 +168,7 @@ const resetGame = function(){
     movesCounter = 0;
     counter.innerHTML='0';
     deck.innerHTML = '';
+    updateRating(0);
     cards = shuffle(cards);
     for (el of cards) {
         el.className = 'card';
@@ -163,6 +182,7 @@ const showResume = function(){
     docFrag.innerHTML = `
     <section class="finalscreen">    
     <h1 class="finaltitle"><i class="fa fa-check"></i><br>GAME COMPLETED</h1>
+    <ul class="finalrating"><li>${ratingStars[0].outerHTML}</li><li>${ratingStars[1].outerHTML}</li><li>${ratingStars[2].outerHTML}</li></ul>
     <p class="finalmessage">You win in ${movesCounter} moves !!!</p>
     <button id="finalreload"><i class="fa fa-repeat"></i> PLAY AGAIN</button>
     </section> `;
@@ -184,7 +204,7 @@ deck.addEventListener('gameCompleted', showResume);
 resetBtn.addEventListener('click', resetGame);
 
 
-
+showResume();
 
 
 // performance monitoring

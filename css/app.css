@@ -158,6 +158,16 @@ check for edge rotation bug with icon
    	
 }
 
+.finalrating{padding-left: 0;margin-bottom: 0;}
+
+.finalrating li {
+    list-style: none;
+    display: inline-block;
+    color: #3c8853;
+    font-size: 28px;
+}
+.finalmessage{margin-top: 0;margin-bottom: 32px;}
+
 #finalreload{
     background: #3c8853;
     color: #fff;
