@@ -204,7 +204,7 @@ deck.addEventListener('gameCompleted', showResume);
 resetBtn.addEventListener('click', resetGame);
 
 
-showResume();
+//showResume();
 
 
 // performance monitoring
