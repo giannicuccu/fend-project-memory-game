@@ -125,11 +125,11 @@ check for edge rotation bug with icon
 
 
 .finalscreen{
-    width: 660px;
-    height: 750px;
-    background: #fff;
-    padding: 32px;
-    border-radius: 10px;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(255, 255, 255,0.95);
+    padding: 0;
+    border-radius: 0;
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
@@ -140,7 +140,9 @@ check for edge rotation bug with icon
 	animation-duration: 0.8s;	
 	animation-iteration-count: 1;
     animation-timing-function: ease-in-out;
-    position: absolute;
+    position: fixed;
+    top:0;
+
 	
 }
 
