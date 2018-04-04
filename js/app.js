@@ -13,7 +13,8 @@
 const startingTime = performance.now();
 // performance monitoring
 
-//debugger
+
+// Initialize Variables
 
 const deck = document.getElementsByClassName('deck')[0];
 let resetBtn = document.getElementsByClassName('restart')[0];
@@ -33,9 +34,6 @@ for (el of cards) {
 counter.innerHTML='0';
 deck.innerHTML = '';
 deck.appendChild(docFrag);
-//console.log(docFrag)
-
-
 
 
 
@@ -108,7 +106,6 @@ const addToOpenCards = function (cardSymbol) {
 
 const lockCards = function () {
     let cards = document.querySelectorAll('.card.open.show');
-
     for (card of cards) {
         card.className = 'card';
         card.classList.add('match')
@@ -121,17 +118,15 @@ const lockCards = function () {
 
 const flipCards = function () {
     let cards = document.querySelectorAll('.card.open.show');
-
     for (card of cards) {
-        card.className = 'card';
-        //card.classList.add('shake')
+        card.className = 'card';        
     }
     openCards = [];    
 }
 
-const shakeCards = function(){
-    let cards = document.querySelectorAll('.card.open.show');    
 
+const shakeCards = function(){
+    let cards = document.querySelectorAll('.card.open.show');
     for (card of cards) {
         card.classList.add('shake')
     }
@@ -142,6 +137,7 @@ const incrementCounter = function () {
     movesCounter += 1;
     counter.innerHTML = movesCounter;
 }
+
 
 const checkForComplete = function () {
     guessedCards === 8 ? deck.dispatchEvent(gameCompletedEvt) : false;
@@ -160,30 +156,29 @@ const resetGame = function(){
         docFrag.appendChild(el);
     }
     deck.appendChild(docFrag);
-    //deck.addEventListener('gameCompleted', showResume);
 }
 
-const showResume = function(){ 
-    
+const showResume = function(){   
+
     docFrag.innerHTML = `
     <section class="finalscreen">    
     <h1 class="finaltitle"><i class="fa fa-check"></i><br>GAME COMPLETED</h1>
     <p class="finalmessage">You win in ${movesCounter} moves !!!</p>
     <button id="finalreload"><i class="fa fa-repeat"></i> PLAY AGAIN</button>
-    </section>
-    `;
+    </section> `;
 
     deck.insertAdjacentHTML('afterend', docFrag.innerHTML);
     reloadBtn = document.getElementById('finalreload');
-    reloadBtn.addEventListener('click', function reloadFnc(){
-        console.log("RELOAD GAME");
+    reloadBtn.addEventListener('click', function reloadFnc(){        
         reloadBtn.parentNode.remove();
-        resetGame();
+        resetGame();        
     })
 }
 
 
-/*Add event listeners*/
+/*
+Event listeners
+*/
 deck.addEventListener('click', displaySymbol);
 deck.addEventListener('gameCompleted', showResume);
 resetBtn.addEventListener('click', resetGame);
