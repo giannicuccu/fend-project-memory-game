@@ -20,11 +20,22 @@ const deck = document.getElementsByClassName('deck')[0];
 let resetBtn = document.getElementsByClassName('restart')[0];
 let ratingStars = document.querySelectorAll('.fa.fa-star');
 let cards = shuffle([...document.querySelectorAll('.card')]);
-let counter =  document.getElementsByClassName('moves')[0];
+let counter = document.getElementsByClassName('moves')[0];
 let docFrag = document.createDocumentFragment();
 let openCards = [];
 let guessedCards = 0;
 let movesCounter = 0;
+
+// game timer
+let startTime;
+let playTime;
+let timerId;
+let timer = document.createElement('div');
+timer.className = 'timer';
+timer.innerText = '00:00';
+resetBtn.insertAdjacentElement('beforeBegin', timer);
+
+// completed of game event
 let gameCompletedEvt = new CustomEvent('gameCompleted');
 
 for (el of cards) {
@@ -57,31 +68,38 @@ function shuffle(array) {
 
 
 /*
-* set up the event listener for a card. If a card is clicked:
-*  - display the card's symbol (put this functionality in another function that you call from this one)
-*  - add the card to a *list* of "open" cards (put this functionality in another function that you call from this one)
-*  - if the list already has another card, check to see if the two cards match
-*    + if the cards do match, lock the cards in the open position (put this functionality in another function that you call from this one)
-*    + if the cards do not match, remove the cards from the list and hide the card's symbol (put this functionality in another function that you call from this one)
-*    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
-*    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
-*/
+ * set up the event listener for a card. If a card is clicked:
+ *  - display the card's symbol (put this functionality in another function that you call from this one)
+ *  - add the card to a *list* of "open" cards (put this functionality in another function that you call from this one)
+ *  - if the list already has another card, check to see if the two cards match
+ *    + if the cards do match, lock the cards in the open position (put this functionality in another function that you call from this one)
+ *    + if the cards do not match, remove the cards from the list and hide the card's symbol (put this functionality in another function that you call from this one)
+ *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
+ *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
+ */
 
 
 
-const displaySymbol = function (evt) {    
+const displaySymbol = function (evt) {
     let cardSymbol = '';
 
-    if (evt.target.nodeName === 'LI' && evt.target.className === 'card' &&  openCards.length <= 1) {
-        evt.target.classList.add('open', 'show');        
+
+    if (startTime === undefined) {
+        startTime = Date.now();
+        timerId = setInterval(runTimer, 1000);
+        timer.classList.toggle('running');
+    }
+
+    if (evt.target.nodeName === 'LI' && evt.target.className === 'card' && openCards.length <= 1) {
+        evt.target.classList.add('open', 'show');
         cardSymbol = evt.target.firstElementChild.className;
         addToOpenCards(cardSymbol);
-    } else if (evt.target.parentNode.nodeName === 'LI'&& evt.target.parentNode.className === 'card' && openCards.length <= 1) {
+    } else if (evt.target.parentNode.nodeName === 'LI' && evt.target.parentNode.className === 'card' && openCards.length <= 1) {
         evt.target.parentNode.classList.add('open', 'show');
         cardSymbol = evt.target.className;
         addToOpenCards(cardSymbol);
-        }
-    
+    }
+
 }
 
 const addToOpenCards = function (cardSymbol) {
@@ -114,22 +132,22 @@ const lockCards = function () {
     guessedCards += 1;
     openCards = [];
 
-    
+
 }
 
 const flipCards = function () {
     let cards = document.querySelectorAll('.card.open.show');
     for (card of cards) {
-        card.className = 'card';        
+        card.className = 'card';
     }
-    openCards = [];    
+    openCards = [];
 }
 
 
-const shakeCards = function(){
+const shakeCards = function () {
     let cards = document.querySelectorAll('.card.open.show');
     for (card of cards) {
-        card.classList.add('shake')
+        card.classList.add('shake');
     }
 }
 
@@ -162,12 +180,16 @@ const checkForComplete = function () {
 }
 
 
-const resetGame = function(){   
+const resetGame = function () {
     openCards = [];
     guessedCards = 0;
     movesCounter = 0;
-    counter.innerHTML='0';
+    counter.innerHTML = '0';
     deck.innerHTML = '';
+    timer.innerText = '00:00';
+    startTime = undefined;
+    clearInterval(timerId);
+    timer.classList.toggle('running');
     updateRating(0);
     cards = shuffle(cards);
     for (el of cards) {
@@ -177,22 +199,36 @@ const resetGame = function(){
     deck.appendChild(docFrag);
 }
 
-const showResume = function(){   
+const showResume = function () {
+
+    clearInterval(timerId);
+
 
     docFrag.innerHTML = `
-    <section class="finalscreen">    
+    <section class="finalscreen">
     <h1 class="finaltitle"><i class="fa fa-check"></i><br>GAME COMPLETED</h1>
     <ul class="finalrating"><li>${ratingStars[0].outerHTML}</li><li>${ratingStars[1].outerHTML}</li><li>${ratingStars[2].outerHTML}</li></ul>
-    <p class="finalmessage">You win in ${movesCounter} moves !!!</p>
+    <p class="finalmessage">You win in ${movesCounter} moves!!! <br/> Game duration: ${playTime}</p>
     <button id="finalreload"><i class="fa fa-repeat"></i> PLAY AGAIN</button>
     </section> `;
 
     deck.insertAdjacentHTML('afterend', docFrag.innerHTML);
     reloadBtn = document.getElementById('finalreload');
-    reloadBtn.addEventListener('click', function reloadFnc(){        
+    reloadBtn.addEventListener('click', function reloadFnc() {
         reloadBtn.parentNode.remove();
-        resetGame();        
+        resetGame();
     })
+}
+
+const runTimer = function () {
+    let seconds, minutes, timelapse;
+    timelapse = Date.now() - startTime;
+    seconds = Math.floor(timelapse / 1000);
+    minutes = Math.floor(seconds / 60);
+    playTime = minutes.toString().padStart(2, 0) + ':' + (seconds % 60).toString().padStart(2, 0);
+    setTimeout(function () {
+        timer.innerText = playTime;
+    }, 0)
 }
 
 
