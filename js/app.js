@@ -21,6 +21,7 @@ let resetBtn = document.getElementsByClassName('restart')[0];
 let ratingStars = document.querySelectorAll('.fa.fa-star');
 let cards = shuffle([...document.querySelectorAll('.card')]);
 let counter = document.getElementsByClassName('moves')[0];
+let progressBar = document.getElementById('progressbar');
 let docFrag = document.createDocumentFragment();
 let openCards = [];
 let guessedCards = 0;
@@ -30,12 +31,13 @@ let movesCounter = 0;
 let startTime;
 let playTime;
 let timerId;
+let timeLimit = 60;
 let timer = document.createElement('div');
 timer.className = 'timer';
 timer.innerText = '00:00';
 resetBtn.insertAdjacentElement('beforeBegin', timer);
 
-// completed of game event
+// completed  game event
 let gameCompletedEvt = new CustomEvent('gameCompleted');
 
 for (el of cards) {
@@ -87,7 +89,7 @@ const displaySymbol = function (evt) {
     if (startTime === undefined) {
         startTime = Date.now();
         timerId = setInterval(runTimer, 1000);
-        timer.classList.toggle('running');
+        timer.classList.add('running');
     }
 
     if (evt.target.nodeName === 'LI' && evt.target.className === 'card' && openCards.length <= 1) {
@@ -160,8 +162,7 @@ const incrementCounter = function () {
 
 
 const updateRating = function (mc) {
-    console.log(ratingStars);
-
+    
     if (mc === 0) {
         for (star of ratingStars) {
             star.className = 'fa fa-star';
@@ -189,7 +190,8 @@ const resetGame = function () {
     timer.innerText = '00:00';
     startTime = undefined;
     clearInterval(timerId);
-    timer.classList.toggle('running');
+    timer.classList.remove('running');
+    progressBar.setAttribute('value', '0')
     updateRating(0);
     cards = shuffle(cards);
     for (el of cards) {
@@ -199,18 +201,26 @@ const resetGame = function () {
     deck.appendChild(docFrag);
 }
 
-const showResume = function () {
+const showResume = function (result) {
 
     clearInterval(timerId);
 
-
-    docFrag.innerHTML = `
-    <section class="finalscreen">
-    <h1 class="finaltitle"><i class="fa fa-check"></i><br>GAME COMPLETED</h1>
-    <ul class="finalrating"><li>${ratingStars[0].outerHTML}</li><li>${ratingStars[1].outerHTML}</li><li>${ratingStars[2].outerHTML}</li></ul>
-    <p class="finalmessage">You win in ${movesCounter} moves!!! <br/> Game duration: ${playTime}</p>
-    <button id="finalreload"><i class="fa fa-repeat"></i> PLAY AGAIN</button>
-    </section> `;
+    if (result === 'lose') {
+        docFrag.innerHTML = `
+        <section class="finalscreen">
+        <h1 class="finaltitle"><i class="fa fa-hourglass-end"></i><br>GAME OVER</h1>
+        <p class="finalmessage">Sorry... you exceeded the time limit</p>
+        <button id="finalreload"><i class="fa fa-repeat"></i> TRY AGAIN</button>
+        </section> `;
+    } else {
+        docFrag.innerHTML = `
+        <section class="finalscreen">
+        <h1 class="finaltitle"><i class="fa fa-check"></i><br>GAME COMPLETED</h1>
+        <ul class="finalrating"><li>${ratingStars[0].outerHTML}</li><li>${ratingStars[1].outerHTML}</li><li>${ratingStars[2].outerHTML}</li></ul>
+        <p class="finalmessage">You win in ${movesCounter} moves!!! <br/> Game duration: ${playTime}</p>
+        <button id="finalreload"><i class="fa fa-repeat"></i> PLAY AGAIN</button>
+        </section> `;
+    }
 
     deck.insertAdjacentHTML('afterend', docFrag.innerHTML);
     reloadBtn = document.getElementById('finalreload');
@@ -226,9 +236,16 @@ const runTimer = function () {
     seconds = Math.floor(timelapse / 1000);
     minutes = Math.floor(seconds / 60);
     playTime = minutes.toString().padStart(2, 0) + ':' + (seconds % 60).toString().padStart(2, 0);
+    progress = Math.floor((seconds * 100) / timeLimit);
+    
     setTimeout(function () {
         timer.innerText = playTime;
+        progressBar.setAttribute('value', progress)
+        if (seconds > timeLimit) {
+            showResume('lose');
+        }
     }, 0)
+
 }
 
 
