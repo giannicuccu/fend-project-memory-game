@@ -28,8 +28,9 @@ let guessedCards = 0;
 let movesCounter = 0;
 
 // game timer variables and elements
-let timeLimit = 60; // play time limit in seconds, if the user reach 60 seconds game over...
-                    // TODO: add 3 user selectable levels, easy (2 min.), normal (1min.) , hard (30 sec)
+// change this to change game difficulty
+let timeLimit = 90; // play time limit in seconds, if the user reach 60 seconds then game over...
+                    // TODO: add 3 user selectable levels, easy (2 min.), normal (1.5 min.) , hard (30 sec)
 
 
 let startTime;      // used to save the start time timestamp
@@ -90,7 +91,6 @@ function shuffle(array) {
  * @param {event} evt the click event
  * 
  */ 
-
 const displaySymbol = function (evt) {
     let cardSymbol = '';
 
@@ -233,7 +233,7 @@ const checkForComplete = function () {
 
 
 /**
-* @description reset all variables and elements and invoke shuffle() function to start a new game 
+ * @description reset all variables and elements and shuffle cards 
  * 
  * 
  */ 
@@ -247,7 +247,7 @@ const resetGame = function () {
     startTime = undefined;
     clearInterval(timerId);
     timer.classList.remove('running');
-    progressBar.setAttribute('value', '0')
+    progressBar.setAttribute('value', '0');
     updateRating(0);
     cards = shuffle(cards);
     for (el of cards) {
