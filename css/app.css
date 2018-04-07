@@ -20,7 +20,7 @@ body {
     background: #ffffff url('../img/geometry2.png');
     /* Background pattern from Subtle Patterns */
     font-family: 'Ubuntu Mono', monospace;
-    color: #2E3D49;
+    color: #2e3d49;
 }
 
 .container {
@@ -293,7 +293,7 @@ check for edge rotation bug with icon
     cursor: pointer;
     font-weight: normal;
     padding: 5px;
-    background: #26BBBE;
+    background: #26bbbe;
     color: #fff;
     border-radius: 5px;
 }
@@ -322,7 +322,7 @@ check for edge rotation bug with icon
 
 .score-panel .timer.running {
     color: #fff;
-    background: #7696C7;
+    background: #7696c7;
 }
 
 #progressbar{
@@ -331,7 +331,7 @@ check for edge rotation bug with icon
     border: 1px solid #ebeced;
     border-radius: 4px;
     margin-bottom: 1px;
-    /* background: #fff; */
+
 }
 #progressbar .bar{
     width: 72%;
@@ -346,8 +346,8 @@ progress::-webkit-progress-bar{
     background: #ebeced;
 }
 progress::-webkit-progress-value {
-    background: #7696C7;
+    background: #7696c7;
     border-radius: 4px;
-    transition: all linear 1s;
+    transition: all linear 0.2s;
 }
 

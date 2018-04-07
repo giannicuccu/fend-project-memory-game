@@ -231,17 +231,18 @@ const showResume = function (result) {
 }
 
 const runTimer = function () {
-    let seconds, minutes, timelapse;
+    let seconds, minutes, timelapse, progress;
     timelapse = Date.now() - startTime;
     seconds = Math.floor(timelapse / 1000);
     minutes = Math.floor(seconds / 60);
     playTime = minutes.toString().padStart(2, 0) + ':' + (seconds % 60).toString().padStart(2, 0);
-    progress = Math.floor((seconds * 100) / timeLimit);
+    progress = ((seconds * 100) / timeLimit).toFixed(2);
     
     setTimeout(function () {
         timer.innerText = playTime;
-        progressBar.setAttribute('value', progress)
-        if (seconds > timeLimit) {
+        console.log(progress)
+        progressBar.setAttribute('value', progress);
+        if (seconds >= timeLimit) {
             showResume('lose');
         }
     }, 0)
