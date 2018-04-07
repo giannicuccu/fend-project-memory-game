@@ -9,8 +9,8 @@
  *   - add each card's HTML to the page
  */
 
-// performance monitoring
-const startingTime = performance.now();
+// ## performance monitoring
+// const startingTime = performance.now();
 // performance monitoring
 
 
@@ -27,15 +27,18 @@ let openCards = [];
 let guessedCards = 0;
 let movesCounter = 0;
 
-// game timer
-let startTime;
-let playTime;
+// game timer variables and elements
+let timeLimit = 60; // play time limit in seconds, if the user reach 60 seconds game over...
+                    // TODO: add 3 user selectable levels, easy (2 min.), normal (1min.) , hard (30 sec)
+
+
+let startTime;      // used to save the start time timestamp
+let playTime;       // used to save the play time
 let timerId;
-let timeLimit = 60;
 let timer = document.createElement('div');
 timer.className = 'timer';
 timer.innerText = '00:00';
-resetBtn.insertAdjacentElement('beforeBegin', timer);
+resetBtn.insertAdjacentElement('beforeBegin', timer); // add the timer to the DOM
 
 // completed  game event
 let gameCompletedEvt = new CustomEvent('gameCompleted');
@@ -81,17 +84,24 @@ function shuffle(array) {
  */
 
 
+ 
+/**
+ * @description start the timer at the first card flip, add classes to flip the card
+ * @param {event} evt the click event
+ * 
+ */ 
 
 const displaySymbol = function (evt) {
     let cardSymbol = '';
 
-
-    if (startTime === undefined) {
+    // start the timer
+    if (startTime === undefined && evt.target.nodeName === 'LI') {
         startTime = Date.now();
         timerId = setInterval(runTimer, 1000);
         timer.classList.add('running');
     }
 
+    // open the card
     if (evt.target.nodeName === 'LI' && evt.target.className === 'card' && openCards.length <= 1) {
         evt.target.classList.add('open', 'show');
         cardSymbol = evt.target.firstElementChild.className;
@@ -101,19 +111,29 @@ const displaySymbol = function (evt) {
         cardSymbol = evt.target.className;
         addToOpenCards(cardSymbol);
     }
-
 }
 
+
+
+/**
+ * @description check if flipped cards match, if cards match invoke functions to lock cards, 
+ *increment move counter, and check if there are other cards to guess
+ *if does not match shake cards increment move counter and flip back cards
+ * @param {string} cardSymbol the card icon class
+ * 
+ */  
 const addToOpenCards = function (cardSymbol) {
     if (openCards.length === 0) {
         openCards.push(cardSymbol);
     } else if (openCards.length === 1) {
         openCards.push(cardSymbol);
-        if (openCards[0] === openCards[1]) {
+        // if open cards match
+        if (openCards[0] === openCards[1]) { 
             lockCards();
             incrementCounter();
             checkForComplete();
-        } else {
+        // if open cards does not match
+        } else { 
             shakeCards();
             incrementCounter();
             window.setTimeout(() => {
@@ -125,6 +145,11 @@ const addToOpenCards = function (cardSymbol) {
 
 }
 
+/**
+ * @description lock guessed cards, increment guessed cards variable, and empty open cards array
+ * 
+ * 
+ */  
 const lockCards = function () {
     let cards = document.querySelectorAll('.card.open.show');
     for (card of cards) {
@@ -133,10 +158,14 @@ const lockCards = function () {
     }
     guessedCards += 1;
     openCards = [];
-
-
 }
 
+
+/**
+ * @description flip back non matching cards and empty open cards array
+ * 
+ * 
+ */ 
 const flipCards = function () {
     let cards = document.querySelectorAll('.card.open.show');
     for (card of cards) {
@@ -146,6 +175,11 @@ const flipCards = function () {
 }
 
 
+/**
+ * @description add shake class effect to opened not matching cards
+ * 
+ * 
+ */ 
 const shakeCards = function () {
     let cards = document.querySelectorAll('.card.open.show');
     for (card of cards) {
@@ -154,6 +188,11 @@ const shakeCards = function () {
 }
 
 
+/**
+ * @description increments the move counter and invoke function to update the star rating
+ * 
+ * 
+ */ 
 const incrementCounter = function () {
     movesCounter += 1;
     counter.innerHTML = movesCounter;
@@ -161,26 +200,43 @@ const incrementCounter = function () {
 }
 
 
+/**
+ * @description update the star rating icons
+ * @param {number} mc move count 
+ * 
+ */ 
 const updateRating = function (mc) {
-    
+    // reset the counter 
     if (mc === 0) {
         for (star of ratingStars) {
             star.className = 'fa fa-star';
         }
+    // rate 2 stars after  12 move
     } else if (mc === 12) {
         ratingStars[2].className = 'fa fa-star-o';
-
+    // rate 1 stars after  18 move
     } else if (mc === 18) {
         ratingStars[1].className = 'fa fa-star-o';
     }
 }
 
 
+/**
+ * @description check if all cards are guessed, 
+ * if all cards are guessed dispatch the completed game custom event
+ * 
+ * 
+ */ 
 const checkForComplete = function () {
     guessedCards === 8 ? deck.dispatchEvent(gameCompletedEvt) : false;
 }
 
 
+/**
+* @description reset all variables and elements and invoke shuffle() function to start a new game 
+ * 
+ * 
+ */ 
 const resetGame = function () {
     openCards = [];
     guessedCards = 0;
@@ -201,10 +257,16 @@ const resetGame = function () {
     deck.appendChild(docFrag);
 }
 
+
+/**
+ * @description open the final overlay, stop the timer, display final info
+ * @param {result} string 
+ * 
+ */ 
 const showResume = function (result) {
 
     clearInterval(timerId);
-
+     
     if (result === 'lose') {
         docFrag.innerHTML = `
         <section class="finalscreen">
@@ -230,7 +292,17 @@ const showResume = function (result) {
     })
 }
 
+
+/**
+ * @description create and update the timer and the progress bar
+ * 
+ * 
+ */ 
 const runTimer = function () {
+    // timer functions inspired by
+    // https://stackoverflow.com/questions/20618355/the-simplest-possible-javascript-countdown-timer
+    // https://stackoverflow.com/questions/5517597/plain-count-up-timer-in-javascript
+    
     let seconds, minutes, timelapse, progress;
     timelapse = Date.now() - startTime;
     seconds = Math.floor(timelapse / 1000);
@@ -238,9 +310,9 @@ const runTimer = function () {
     playTime = minutes.toString().padStart(2, 0) + ':' + (seconds % 60).toString().padStart(2, 0);
     progress = ((seconds * 100) / timeLimit).toFixed(2);
     
+    // send timer DOM updates to the queue
     setTimeout(function () {
-        timer.innerText = playTime;
-        console.log(progress)
+        timer.innerText = playTime;       
         progressBar.setAttribute('value', progress);
         if (seconds >= timeLimit) {
             showResume('lose');
@@ -251,17 +323,15 @@ const runTimer = function () {
 
 
 /*
-Event listeners
-*/
+ * EVENT LISTENERS
+ */ 
 deck.addEventListener('click', displaySymbol);
 deck.addEventListener('gameCompleted', showResume);
 resetBtn.addEventListener('click', resetGame);
 
 
-//showResume();
 
-
-// performance monitoring
-const endingTime = performance.now();
-console.log('This code took ' + (endingTime - startingTime) + ' milliseconds.');
+// ## performance monitoring
+// const endingTime = performance.now();
+//console.log('This code took ' + (endingTime - startingTime) + ' milliseconds.');
 // performance monitoring
