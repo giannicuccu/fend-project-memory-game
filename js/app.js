@@ -27,7 +27,7 @@ let openCards = [];
 let guessedCards = 0;
 let movesCounter = 0;
 
-// game timer variables and elements
+// Game timer variables and elements
 // change this to change game difficulty
 let timeLimit = 90; // play time limit in seconds, if the user reach 60 seconds then game over...
                     // TODO: add 3 user selectable levels, easy (2 min.), normal (1.5 min.) , hard (30 sec)
@@ -41,7 +41,7 @@ timer.className = 'timer';
 timer.innerText = '00:00';
 resetBtn.insertAdjacentElement('beforeBegin', timer); // add the timer to the DOM
 
-// completed  game event
+// Completed  game event
 let gameCompletedEvt = new CustomEvent('gameCompleted');
 
 for (el of cards) {
@@ -87,8 +87,8 @@ function shuffle(array) {
 
  
 /**
- * @description start the timer at the first card flip, add classes to flip the card
- * @param {event} evt the click event
+ * @description Start the timer at the first card flip, add classes to flip the card
+ * @param {event} evt The click event
  * 
  */ 
 const displaySymbol = function (evt) {
@@ -116,10 +116,10 @@ const displaySymbol = function (evt) {
 
 
 /**
- * @description check if flipped cards match, if cards match invoke functions to lock cards, 
+ * @description Check if flipped cards match, if cards match invoke functions to lock cards, 
  *increment move counter, and check if there are other cards to guess
  *if does not match shake cards increment move counter and flip back cards
- * @param {string} cardSymbol the card icon class
+ * @param {string} cardSymbol The card icon class
  * 
  */  
 const addToOpenCards = function (cardSymbol) {
@@ -146,7 +146,7 @@ const addToOpenCards = function (cardSymbol) {
 }
 
 /**
- * @description lock guessed cards, increment guessed cards variable, and empty open cards array
+ * @description Lock guessed cards, increment guessed cards variable, and empty open cards array
  * 
  * 
  */  
@@ -162,7 +162,7 @@ const lockCards = function () {
 
 
 /**
- * @description flip back non matching cards and empty open cards array
+ * @description Flip back non matching cards and empty open cards array
  * 
  * 
  */ 
@@ -176,7 +176,7 @@ const flipCards = function () {
 
 
 /**
- * @description add shake class effect to opened not matching cards
+ * @description Add shake class effect to opened not matching cards
  * 
  * 
  */ 
@@ -189,7 +189,7 @@ const shakeCards = function () {
 
 
 /**
- * @description increments the move counter and invoke function to update the star rating
+ * @description Increments the move counter and invoke function to update the star rating
  * 
  * 
  */ 
@@ -201,8 +201,8 @@ const incrementCounter = function () {
 
 
 /**
- * @description update the star rating icons
- * @param {number} mc move count 
+ * @description Update the star rating icons
+ * @param {number} mc Move count 
  * 
  */ 
 const updateRating = function (mc) {
@@ -222,7 +222,7 @@ const updateRating = function (mc) {
 
 
 /**
- * @description check if all cards are guessed, 
+ * @description Check if all cards are guessed, 
  * if all cards are guessed dispatch the completed game custom event
  * 
  * 
@@ -233,7 +233,7 @@ const checkForComplete = function () {
 
 
 /**
- * @description reset all variables and elements and shuffle cards 
+ * @description Reset all variables and elements and shuffle cards 
  * 
  * 
  */ 
@@ -259,7 +259,7 @@ const resetGame = function () {
 
 
 /**
- * @description open the final overlay, stop the timer, display final info
+ * @description Open the final overlay, stop the timer, display final info
  * @param {result} string 
  * 
  */ 
@@ -294,7 +294,7 @@ const showResume = function (result) {
 
 
 /**
- * @description create and update the timer and the progress bar
+ * @description Create and update the timer and the progress bar
  * 
  * 
  */ 
